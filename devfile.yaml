@@ -9,17 +9,25 @@ metadata:
   - Express
   - ubi8
   version: 1.0.1
-schemaVersion: 2.0.0
+schemaVersion: 2.2.0
 parent:
   id: nodejs
   registryUrl: "https://registry.devfile.io"
-  components:
-  - container:
-      endpoints:
-      - exposure: public
-        name: web
-        targetPort: 8080
-      - name: http-3000
-        targetPort: 3000
-        exposure: internal
-    name: runtime
+components:
+  - name: outerloop-build
+    image:
+      imageName: nodejs-image:latest
+      dockerfile:
+        uri: Dockerfile
+        buildContext: .
+        rootRequired: false
+  - name: outerloop-deploy
+    attributes:
+      deployment/replicas: 1
+      deployment/cpuLimit: "100m"
+      deployment/cpuRequest: 10m
+      deployment/memoryLimit: 100Mi
+      deployment/memoryRequest: 50Mi
+      deployment/container-port: 8080
+    kubernetes:
+      uri: outerloop-deploy.yaml
