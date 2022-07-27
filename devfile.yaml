@@ -29,5 +29,10 @@ components:
       deployment/memoryLimit: 100Mi
       deployment/memoryRequest: 50Mi
       deployment/container-port: 8080
+      deployment/containerENV:
+        - name: OPENSHIFT_BUILD_NAMESPACE
+          value: yangcao
+        - name: URL_PREFIX
+          value: gateway-vertx-new2
     kubernetes:
       uri: outerloop-deploy.yaml
